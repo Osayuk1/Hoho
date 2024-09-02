@@ -1,0 +1,196 @@
+<html><head><base href="https://websim.gift.cards/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GiftCardHub - Buy and Send Gift Cards</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    header {
+        background-color: #4a90e2;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+    }
+    main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+    .gift-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    .gift-card:hover {
+        transform: translateY(-5px);
+    }
+    .gift-card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+    .gift-card h3 {
+        margin: 1rem 0;
+    }
+    .gift-card button {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .gift-card button:hover {
+        background-color: #3a7bc8;
+    }
+    #payment-modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 500px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .close:hover {
+        color: #000;
+    }
+    form {
+        display: grid;
+        gap: 1rem;
+    }
+    input, select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    #submit-payment {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    #submit-payment:hover {
+        background-color: #3a7bc8;
+    }
+</style>
+</head>
+<body>
+    <header>
+        <h1>GiftCardHub</h1>
+        <p>Buy and Send Gift Cards to Your Loved Ones</p>
+    </header>
+    <main>
+        <div class="card-grid">
+            <div class="gift-card">
+                <img src="https://websim.gift.cards/images/amazon-gift-card.svg" alt="Amazon Gift Card" width="200" height="120">
+                <h3>Amazon Gift Card</h3>
+                <p>$25 - $500</p>
+                <button onclick="openPaymentModal('Amazon', 25, 500)">Buy Now</button>
+            </div>
+            <div class="gift-card">
+                <img src="https://websim.gift.cards/images/starbucks-gift-card.svg" alt="Starbucks Gift Card" width="200" height="120">
+                <h3>Starbucks Gift Card</h3>
+                <p>$10 - $100</p>
+                <button onclick="openPaymentModal('Starbucks', 10, 100)">Buy Now</button>
+            </div>
+            <div class="gift-card">
+                <img src="https://websim.gift.cards/images/itunes-gift-card.svg" alt="iTunes Gift Card" width="200" height="120">
+                <h3>iTunes Gift Card</h3>
+                <p>$15 - $200</p>
+                <button onclick="openPaymentModal('iTunes', 15, 200)">Buy Now</button>
+            </div>
+            <div class="gift-card">
+                <img src="https://websim.gift.cards/images/target-gift-card.svg" alt="Target Gift Card" width="200" height="120">
+                <h3>Target Gift Card</h3>
+                <p>$20 - $300</p>
+                <button onclick="openPaymentModal('Target', 20, 300)">Buy Now</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="payment-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h2>Purchase Gift Card</h2>
+            <form id="payment-form">
+                <input type="text" id="card-type" readonly>
+                <input type="number" id="amount" placeholder="Amount" required>
+                <input type="text" id="recipient-name" placeholder="Recipient's Name" required>
+                <input type="email" id="recipient-email" placeholder="Recipient's Email" required>
+                <input type="text" id="card-number" placeholder="Card Number" required>
+                <input type="text" id="card-name" placeholder="Name on Card" required>
+                <div style="display: flex; gap: 1rem;">
+                    <input type="text" id="expiry" placeholder="MM/YY" required style="width: 50%;">
+                    <input type="text" id="cvv" placeholder="CVV" required style="width: 50%;">
+                </div>
+                <button type="submit" id="submit-payment">Complete Purchase</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('payment-modal');
+        const form = document.getElementById('payment-form');
+        const cardTypeInput = document.getElementById('card-type');
+        const amountInput = document.getElementById('amount');
+
+        function openPaymentModal(cardType, min, max) {
+            modal.style.display = 'block';
+            cardTypeInput.value = cardType + ' Gift Card';
+            amountInput.min = min;
+            amountInput.max = max;
+            amountInput.placeholder = `Amount ($${min} - $${max})`;
+        }
+
+        function closePaymentModal() {
+            modal.style.display = 'none';
+            form.reset();
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Here you would typically send the form data to a server for processing
+            alert('Thank you for your purchase! The gift card will be sent to the recipient.');
+            closePaymentModal();
+        });
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closePaymentModal();
+            }
+        }
+    </script>
+</body></html>
